@@ -34,7 +34,6 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
 
-
     def create_buttons(self):
         self.simtype1_radioButton = QtWidgets.QRadioButton(self.centralwidget)
         self.simtype1_radioButton.setGeometry(QtCore.QRect(30, 50, 300, 17))
@@ -56,6 +55,7 @@ class Ui_MainWindow(object):
         self.stopButton = QtWidgets.QPushButton(self.centralwidget)
         self.stopButton.setGeometry(QtCore.QRect(165, 360, 140, 50))
         self.stopButton.setObjectName("stopButton")
+        self.stopButton.setEnabled(False)
         self.infoButton = QtWidgets.QPushButton(self.centralwidget)
         self.infoButton.setGeometry(QtCore.QRect(10, 10, 20, 20))
         self.infoButton.setObjectName("infoButton")
@@ -148,6 +148,8 @@ class Ui_MainWindow(object):
         self.startButton.clicked.connect(self.start_simulation)
         self.stopButton.clicked.connect(self.stop_simulation)
         self.infoButton.clicked.connect(self.display_info)
+        self.simtype1_radioButton.clicked.connect(self.disable_sim2)
+        self.simtype2_radioButton.clicked.connect(self.enable_sim2)
 
 
     def retranslateUi(self, MainWindow:object) -> None:
@@ -171,7 +173,66 @@ class Ui_MainWindow(object):
         self.simtype1_radioButton.setText(_translate("MainWindow", "time evolution of a single field line"))
         self.simtype2_radioButton.setText(_translate("MainWindow", "field lines in a given time"))
 
+
+    def disable_sim2(self):
+        self.linesSlider.setEnabled(False)
+        self.stopButton.setEnabled(False)
+
+
+    def enable_sim2(self):
+        self.linesSlider.setEnabled(True)
+        self.stopButton.setEnabled(False)
+
+
+    def update_slider_labels(self):
+        self.timeNumber_label.setText(str(self.timeSlider.value()*0.05))
+        self.linesNumber_label.setText(str(self.linesSlider.value()))
+        self.aziNumber_label.setText(str(self.azimuthSlider.value()))
+        self.elevNumber_label.setText(str(self.elevationSlider.value()))
+        self.chart.camera_update(self.azimuthSlider.value(),self.elevationSlider.value())
+
+
+    def start_simulation(self):
+
+        if self.simtype1_radioButton.isChecked():
+
+            self.chart.sim1_init_figure(
+                self.magneticfield_checkBox.isChecked(),
+                self.electricfield_checkBox.isChecked(),
+                self.timeSlider.value()*0.05,
+                self.azimuthSlider.value(),
+                self.elevationSlider.value(),
+                self.timeNumber_label,
+                self.timeSlider,
+                self.startButton,
+                self.stopButton
+            )
+
+        elif self.simtype2_radioButton.isChecked():
+
+            self.chart.sim2_init_figure(
+                self.magneticfield_checkBox.isChecked(),
+                self.electricfield_checkBox.isChecked(),
+                self.timeSlider.value()*0.05,
+                self.azimuthSlider.value(),
+                self.elevationSlider.value(),
+                self.linesSlider.value(),
+                self.startButton,
+                self.stopButton
+            )
+            
+        else:
+            self.display_message()
+
     
+    def display_message(self):
+        self.message = QtWidgets.QMessageBox()
+        self.message.setIcon(QtWidgets.QMessageBox.Warning)
+        self.message.setWindowTitle("Warning")
+        self.message.setText("Please choose a simulation mode.")
+        self.message.exec()
+
+
     def display_info(self) -> None:
         self.info = QtWidgets.QMessageBox()
         self.info.setIcon(QtWidgets.QMessageBox.Information)
@@ -187,53 +248,6 @@ class Ui_MainWindow(object):
             )
         self.info.exec()
         
-
-    def update_slider_labels(self):
-        self.timeNumber_label.setText(str(self.timeSlider.value()*0.05))
-        self.linesNumber_label.setText(str(self.linesSlider.value()))
-        self.aziNumber_label.setText(str(self.azimuthSlider.value()))
-        self.elevNumber_label.setText(str(self.elevationSlider.value()))
-        self.chart.camera_update(self.azimuthSlider.value(),self.elevationSlider.value())
-
-
-    def start_simulation(self):
-
-        if self.simtype1_radioButton.isChecked():
-            self.disable_GUI()
-            self.chart.sim1_init_figure(
-                self.magneticfield_checkBox.isChecked(),
-                self.electricfield_checkBox.isChecked(),
-                self.timeSlider.value()*0.05,
-                self.azimuthSlider.value(),
-                self.elevationSlider.value(),
-                self.timeNumber_label,
-                self.timeSlider
-            )
-            self.enable_GUI()
-
-        elif self.simtype2_radioButton.isChecked():
-            self.disable_GUI()
-            self.chart.sim2_init_figure(
-                self.magneticfield_checkBox.isChecked(),
-                self.electricfield_checkBox.isChecked(),
-                self.timeSlider.value()*0.05,
-                self.azimuthSlider.value(),
-                self.elevationSlider.value(),
-                self.linesSlider.value()
-            )
-            self.enable_GUI()
-            
-        else:
-            self.display_message()
-
-    
-    def display_message(self):
-        self.message = QtWidgets.QMessageBox()
-        self.message.setIcon(QtWidgets.QMessageBox.Warning)
-        self.message.setWindowTitle("Warning")
-        self.message.setText("Please choose a simulation mode.")
-        self.message.exec()
-        
         
     def stop_simulation(self):
         self.chart.stop_time()
@@ -241,6 +255,7 @@ class Ui_MainWindow(object):
 
     def disable_GUI(self):
         self.timeSlider.setEnabled(False)
+        self.linesSlider.setEnabled(False)
         self.azimuthSlider.setEnabled(False)
         self.elevationSlider.setEnabled(False)
         self.magneticfield_checkBox.setEnabled(False)
@@ -251,6 +266,7 @@ class Ui_MainWindow(object):
 
     def enable_GUI(self):
         self.timeSlider.setEnabled(True)
+        self.linesSlider.setEnabled(True)
         self.azimuthSlider.setEnabled(True)
         self.elevationSlider.setEnabled(True)
         self.magneticfield_checkBox.setEnabled(True)
