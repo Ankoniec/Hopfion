@@ -205,7 +205,9 @@ class Ui_MainWindow(object):
                 self.timeNumber_label,
                 self.timeSlider,
                 self.startButton,
-                self.stopButton
+                self.stopButton,
+                self.azimuthSlider,
+                self.elevationSlider
             )
 
         elif self.simtype2_radioButton.isChecked():
@@ -216,9 +218,7 @@ class Ui_MainWindow(object):
                 self.timeSlider.value()*0.05,
                 self.azimuthSlider.value(),
                 self.elevationSlider.value(),
-                self.linesSlider.value(),
-                self.startButton,
-                self.stopButton
+                self.linesSlider.value()
             )
             
         else:

@@ -25,7 +25,8 @@ class SimulationChart(FigureCanvas):
     def sim1_init_figure(self, draw_magnetic:bool=False, draw_electric:bool=False,
                         init_time:float=0, azimuth:int=30, elevation:int=30, 
                         time_label:object=None, time_slider:object=None,
-                        start_button:object=None, stop_button:object=None) -> None:
+                        start_button:object=None, stop_button:object=None,
+                        azimuth_slider:object=None, elevation_slider:object=None) -> None:
         
         self.azi = azimuth
         self.elev = elevation
@@ -33,6 +34,8 @@ class SimulationChart(FigureCanvas):
         self.time_slider = time_slider
         self.start_button = start_button
         self.stop_button = stop_button
+        self.azimuth_slider = azimuth_slider
+        self.elevation_slider = elevation_slider
 
         if draw_magnetic==True:
             self.magnetic_field = Simulation(1,-1,1,init_time,'magnetic')
@@ -55,6 +58,8 @@ class SimulationChart(FigureCanvas):
         self.timer.start(10)
         self.start_button.setEnabled(False)
         self.stop_button.setEnabled(True)
+        self.azimuth_slider.setEnabled(False)
+        self.elevation_slider.setEnabled(False)
 
 
     def update_figure(self) -> None:
@@ -86,17 +91,19 @@ class SimulationChart(FigureCanvas):
             self.stop_button.setEnabled(False)
         except AttributeError:
             pass
+        
+        try:
+            self.azimuth_slider.setEnabled(True)
+            self.elevation_slider.setEnabled(True)
+        except AttributeError:
+            pass
 
 
     def sim2_init_figure(self, draw_magnetic:bool=False, draw_electric:bool=False,
-                        init_time:float=0, azimuth:int=30, elevation:int=30, lines:int=20,
-                        start_button:object=None, stop_button:object=None) -> None:
+                        init_time:float=0, azimuth:int=30, elevation:int=30, lines:int=20) -> None:
 
         theta = np.linspace(0,2*np.pi-2*np.pi/lines,lines)
         self.axes.cla()
-        self.start_button = start_button
-        self.stop_button = stop_button
-        self.start_sim2_time()
 
         if draw_magnetic==True:
             for th in theta:
@@ -110,11 +117,3 @@ class SimulationChart(FigureCanvas):
                 
         self.axes.view_init(azimuth,elevation)
         self.draw()
-        self.stop_time()
-
-
-    def start_sim2_time(self) -> None:
-        self.timer = QtCore.QTimer(self)
-        self.timer.start(10)
-        self.start_button.setEnabled(False)
-        self.stop_button.setEnabled(False)
