@@ -23,10 +23,13 @@ class SimulationChart(FigureCanvas):
 
 
     def sim1_init_figure(self, draw_magnetic:bool=False, draw_electric:bool=False,
-                        init_time:float=0, azimuth:int=30, elevation:int=30) -> None:
+                        init_time:float=0, azimuth:int=30, elevation:int=30, 
+                        time_label:object=None, time_slider:object=None) -> None:
         
         self.azi = azimuth
         self.elev = elevation
+        self.time_label = time_label
+        self.time_slider = time_slider
 
         if draw_magnetic==True:
             self.magnetic_field = Simulation(1,-1,1,init_time,'magnetic')
@@ -60,12 +63,17 @@ class SimulationChart(FigureCanvas):
         self.axes.cla()
 
         if self.electric_field:
+            self.time_label.setText(str(self.electric_field.t))
+            self.time_slider.setValue(int(self.electric_field.t/0.05))
             EX, EY, EZ = self.electric_field.field_line()
             self.axes.plot(EX,EY,EZ,'teal')
             if self.electric_field.t >= 10.0:
                 self.stop_time()
+            
 
         if self.magnetic_field:
+            self.time_label.setText(str(self.magnetic_field.t))
+            self.time_slider.setValue(int(self.magnetic_field.t/0.05))
             BX, BY, BZ = self.magnetic_field.field_line()
             self.axes.plot(BX,BY,BZ,'black')
             if self.magnetic_field.t >= 10.0:

@@ -205,7 +205,9 @@ class Ui_MainWindow(object):
                 self.electricfield_checkBox.isChecked(),
                 self.timeSlider.value()*0.05,
                 self.azimuthSlider.value(),
-                self.elevationSlider.value()
+                self.elevationSlider.value(),
+                self.timeNumber_label,
+                self.timeSlider
             )
             self.enable_GUI()
 
