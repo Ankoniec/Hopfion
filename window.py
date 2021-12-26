@@ -200,8 +200,6 @@ class Ui_MainWindow(object):
                 self.magneticfield_checkBox.isChecked(),
                 self.electricfield_checkBox.isChecked(),
                 self.timeSlider.value()*0.05,
-                self.azimuthSlider.value(),
-                self.elevationSlider.value(),
                 self.timeNumber_label,
                 self.timeSlider,
                 self.startButton,
@@ -216,15 +214,17 @@ class Ui_MainWindow(object):
                 self.magneticfield_checkBox.isChecked(),
                 self.electricfield_checkBox.isChecked(),
                 self.timeSlider.value()*0.05,
-                self.azimuthSlider.value(),
-                self.elevationSlider.value(),
                 self.linesSlider.value()
             )
             
         else:
             self.display_message()
 
+
+    def stop_simulation(self):
+        self.chart.stop_time()
     
+
     def display_message(self):
         self.message = QtWidgets.QMessageBox()
         self.message.setIcon(QtWidgets.QMessageBox.Warning)
@@ -247,29 +247,3 @@ class Ui_MainWindow(object):
             "User can choose position of the camera in both variants by changing azimuth and elevation."
             )
         self.info.exec()
-        
-        
-    def stop_simulation(self):
-        self.chart.stop_time()
-
-
-    def disable_GUI(self):
-        self.timeSlider.setEnabled(False)
-        self.linesSlider.setEnabled(False)
-        self.azimuthSlider.setEnabled(False)
-        self.elevationSlider.setEnabled(False)
-        self.magneticfield_checkBox.setEnabled(False)
-        self.electricfield_checkBox.setEnabled(False)
-        self.simtype1_radioButton.setEnabled(False)
-        self.simtype2_radioButton.setEnabled(False)
-
-
-    def enable_GUI(self):
-        self.timeSlider.setEnabled(True)
-        self.linesSlider.setEnabled(True)
-        self.azimuthSlider.setEnabled(True)
-        self.elevationSlider.setEnabled(True)
-        self.magneticfield_checkBox.setEnabled(True)
-        self.electricfield_checkBox.setEnabled(True)
-        self.simtype1_radioButton.setEnabled(True)
-        self.simtype2_radioButton.setEnabled(True)
