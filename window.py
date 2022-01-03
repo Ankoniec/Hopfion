@@ -44,11 +44,11 @@ class Ui_MainWindow(object):
         self.simtype2_radioButton.setObjectName("simtype2_radioButton")
 
         self.electricfield_checkBox = QtWidgets.QCheckBox(self.centralwidget)
-        self.electricfield_checkBox.setGeometry(QtCore.QRect(40, 100, 111, 17))
+        self.electricfield_checkBox.setGeometry(QtCore.QRect(20, 100, 150, 17))
         self.electricfield_checkBox.setObjectName("electricfield_checkBox")
         self.electricfield_checkBox.setChecked(True)
         self.magneticfield_checkBox = QtWidgets.QCheckBox(self.centralwidget)
-        self.magneticfield_checkBox.setGeometry(QtCore.QRect(160, 100, 131, 17))
+        self.magneticfield_checkBox.setGeometry(QtCore.QRect(160, 100, 150, 17))
         self.magneticfield_checkBox.setObjectName("magneticfield_checkBox")
         self.magneticfield_checkBox.setChecked(True)
 
@@ -109,16 +109,16 @@ class Ui_MainWindow(object):
         self.elevNumber_label.setObjectName("elevNumber")
 
         self.time_label = QtWidgets.QLabel(self.centralwidget)
-        self.time_label.setGeometry(QtCore.QRect(30, 138, 100, 21))
+        self.time_label.setGeometry(QtCore.QRect(10, 138, 60, 21))
         self.time_label.setObjectName("time_label")
         self.lines_label = QtWidgets.QLabel(self.centralwidget)
-        self.lines_label.setGeometry(QtCore.QRect(30, 178, 100, 21))
+        self.lines_label.setGeometry(QtCore.QRect(10, 178, 60, 21))
         self.lines_label.setObjectName("lines_label")
         self.azimuth_label = QtWidgets.QLabel(self.centralwidget)
-        self.azimuth_label.setGeometry(QtCore.QRect(20, 268, 100, 16))
+        self.azimuth_label.setGeometry(QtCore.QRect(10, 270, 60, 16))
         self.azimuth_label.setObjectName("azimuth_label")
         self.elevation_label = QtWidgets.QLabel(self.centralwidget)
-        self.elevation_label.setGeometry(QtCore.QRect(10, 308, 100, 16))
+        self.elevation_label.setGeometry(QtCore.QRect(10, 310, 60, 16))
         self.elevation_label.setObjectName("elevation_label")
         self.camposition_label = QtWidgets.QLabel(self.centralwidget)
         self.camposition_label.setGeometry(QtCore.QRect(110, 230, 150, 16))
@@ -220,7 +220,7 @@ class Ui_MainWindow(object):
                     self.electricfield_checkBox.isChecked(),
                     self.timeSlider.value()*0.05,
                     self.timeNumber_label,
-                    self.timeSlider,
+                    self.timeSlider ,
                     self.startButton,
                     self.stopButton,
                     self.resetButton,
