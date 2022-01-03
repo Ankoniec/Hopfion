@@ -4,7 +4,7 @@
 
 **Email address**: ankoniec@student.fis.agh.edu.pl
 
-**University**: AGH Univeristy od Science and Technology
+**University**: AGH Univeristy of Science and Technology
 
 Project was made as a part of engineering thesis.
 
