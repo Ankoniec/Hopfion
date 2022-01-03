@@ -30,17 +30,19 @@ class SimulationChart(FigureCanvas):
 
     def sim1_init_figure(self, draw_magnetic:bool=False, draw_electric:bool=False, 
                         init_time:float=0, time_label:object=None, time_slider:object=None,
-                        start_button:object=None, stop_button:object=None,
+                        start_button:object=None, stop_button:object=None, reset_button:object=None,
                         azimuth_slider:object=None, elevation_slider:object=None) -> None:
         
         self.time_label = time_label
         self.time_slider = time_slider
         self.start_button = start_button
         self.stop_button = stop_button
+        self.reset_button = reset_button
         self.azimuth_slider = azimuth_slider
         self.elevation_slider = elevation_slider
         self.start_button.setEnabled(False)
         self.stop_button.setEnabled(True)
+        self.reset_button.setEnabled(False)
         self.azimuth_slider.setEnabled(False)
         self.elevation_slider.setEnabled(False)
 
@@ -104,6 +106,7 @@ class SimulationChart(FigureCanvas):
 
         self.start_button.setEnabled(True)
         self.stop_button.setEnabled(False)
+        self.reset_button.setEnabled(True)
         self.azimuth_slider.setEnabled(True)
         self.elevation_slider.setEnabled(True)
 

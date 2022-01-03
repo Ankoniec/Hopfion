@@ -35,7 +35,7 @@ class Ui_MainWindow(object):
         self.stopButton.setEnabled(False)
 
 
-    def create_buttons(self):
+    def create_buttons(self) -> None:
         self.simtype1_radioButton = QtWidgets.QRadioButton(self.centralwidget)
         self.simtype1_radioButton.setGeometry(QtCore.QRect(30, 50, 300, 17))
         self.simtype1_radioButton.setObjectName("simtype1_radioButton")
@@ -46,23 +46,28 @@ class Ui_MainWindow(object):
         self.electricfield_checkBox = QtWidgets.QCheckBox(self.centralwidget)
         self.electricfield_checkBox.setGeometry(QtCore.QRect(40, 100, 111, 17))
         self.electricfield_checkBox.setObjectName("electricfield_checkBox")
+        self.electricfield_checkBox.setChecked(True)
         self.magneticfield_checkBox = QtWidgets.QCheckBox(self.centralwidget)
         self.magneticfield_checkBox.setGeometry(QtCore.QRect(160, 100, 131, 17))
         self.magneticfield_checkBox.setObjectName("magneticfield_checkBox")
+        self.magneticfield_checkBox.setChecked(True)
 
         self.startButton = QtWidgets.QPushButton(self.centralwidget)
-        self.startButton.setGeometry(QtCore.QRect(15, 360, 140, 50))
+        self.startButton.setGeometry(QtCore.QRect(15, 360, 145, 40))
         self.startButton.setObjectName("startButton")
         self.stopButton = QtWidgets.QPushButton(self.centralwidget)
-        self.stopButton.setGeometry(QtCore.QRect(165, 360, 140, 50))
+        self.stopButton.setGeometry(QtCore.QRect(160, 360, 145, 40))
         self.stopButton.setObjectName("stopButton")
         self.stopButton.setEnabled(False)
+        self.resetButton = QtWidgets.QPushButton(self.centralwidget)
+        self.resetButton.setGeometry(QtCore.QRect(15, 400, 290, 30))
+        self.resetButton.setObjectName("resetButton")
         self.infoButton = QtWidgets.QPushButton(self.centralwidget)
         self.infoButton.setGeometry(QtCore.QRect(10, 10, 20, 20))
         self.infoButton.setObjectName("infoButton")
         
 
-    def create_sliders(self):
+    def create_sliders(self) -> None:
         self.timeSlider = QtWidgets.QSlider(self.centralwidget)
         self.timeSlider.setGeometry(QtCore.QRect(70, 140, 201, 22))
         self.timeSlider.setMaximum(200)
@@ -77,7 +82,7 @@ class Ui_MainWindow(object):
 
         self.azimuthSlider = QtWidgets.QSlider(self.centralwidget)
         self.azimuthSlider.setGeometry(QtCore.QRect(70, 270, 201, 22))
-        self.azimuthSlider.setMaximum(360)
+        self.azimuthSlider.setMaximum(90)
         self.azimuthSlider.setOrientation(QtCore.Qt.Horizontal)
         self.azimuthSlider.setObjectName("azimuthSlider")
         self.azimuthSlider.setValue(30)
@@ -89,7 +94,7 @@ class Ui_MainWindow(object):
         self.elevationSlider.setValue(30)
 
 
-    def create_labels(self):
+    def create_labels(self) -> None:
         self.timeNumber_label = QtWidgets.QLabel(self.centralwidget)
         self.timeNumber_label.setGeometry(QtCore.QRect(280, 138, 21, 23))
         self.timeNumber_label.setObjectName("timeNumber")
@@ -123,7 +128,7 @@ class Ui_MainWindow(object):
         self.settings_label.setObjectName("settings_label")
 
 
-    def create_lines(self):
+    def create_lines(self) -> None:
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setGeometry(QtCore.QRect(310, 10, 20, 420))
         self.line.setFrameShape(QtWidgets.QFrame.VLine)
@@ -141,7 +146,7 @@ class Ui_MainWindow(object):
         self.line_3.setObjectName("line_3")
 
 
-    def connect_buttons(self):
+    def connect_buttons(self) -> None:
         self.timeSlider.valueChanged.connect(self.update_slider_labels)
         self.linesSlider.valueChanged.connect(self.update_slider_labels)
         self.azimuthSlider.valueChanged.connect(self.update_slider_labels)
@@ -151,6 +156,7 @@ class Ui_MainWindow(object):
         self.simtype2_radioButton.clicked.connect(self.sim2_GUI)
         self.startButton.clicked.connect(self.start_simulation)
         self.stopButton.clicked.connect(self.stop_simulation)
+        self.resetButton.clicked.connect(self.reset_settings)
 
 
     def retranslateUi(self, MainWindow:object) -> None:
@@ -160,6 +166,7 @@ class Ui_MainWindow(object):
         self.magneticfield_checkBox.setText(_translate("MainWindow", "magnetic field (black)"))
         self.startButton.setText(_translate("MainWindow", "Start"))
         self.stopButton.setText(_translate("MainWindow", "Stop"))
+        self.resetButton.setText(_translate("MainWindow", "Reset"))
         self.infoButton.setText(_translate("MainWindow", "?"))
         self.timeNumber_label.setText(_translate("MainWindow", "0"))
         self.linesNumber_label.setText(_translate("MainWindow", "20"))
@@ -175,15 +182,15 @@ class Ui_MainWindow(object):
         self.simtype2_radioButton.setText(_translate("MainWindow", "field lines for a given time"))
 
 
-    def sim1_GUI(self):
+    def sim1_GUI(self) -> None:
         self.linesSlider.setEnabled(False)
 
 
-    def sim2_GUI(self):
+    def sim2_GUI(self) -> None:
         self.linesSlider.setEnabled(True)
 
 
-    def update_slider_labels(self):
+    def update_slider_labels(self) -> None:
         self.timeNumber_label.setText(str(self.timeSlider.value()*0.05))
         self.linesNumber_label.setText(str(self.linesSlider.value()))
         self.aziNumber_label.setText(str(self.azimuthSlider.value()))
@@ -191,7 +198,16 @@ class Ui_MainWindow(object):
         self.chart.camera_update(self.azimuthSlider.value(),self.elevationSlider.value())
 
 
-    def start_simulation(self):
+    def reset_settings(self) -> None:
+        self.electricfield_checkBox.setChecked(True)
+        self.magneticfield_checkBox.setChecked(True)
+        self.linesSlider.setValue(20)
+        self.azimuthSlider.setValue(30)
+        self.elevationSlider.setValue(30)
+        self.timeSlider.setValue(0)
+
+
+    def start_simulation(self) -> None:
 
         if self.simtype1_radioButton.isChecked():
 
@@ -199,7 +215,6 @@ class Ui_MainWindow(object):
                 self.field_error()
 
             else:
-
                 self.chart.sim1_init_figure(
                     self.magneticfield_checkBox.isChecked(),
                     self.electricfield_checkBox.isChecked(),
@@ -208,6 +223,7 @@ class Ui_MainWindow(object):
                     self.timeSlider,
                     self.startButton,
                     self.stopButton,
+                    self.resetButton,
                     self.azimuthSlider,
                     self.elevationSlider
                 )
@@ -218,7 +234,6 @@ class Ui_MainWindow(object):
                 self.field_error()
 
             else:            
-
                 self.chart.sim2_init_figure(
                     self.magneticfield_checkBox.isChecked(),
                     self.electricfield_checkBox.isChecked(),
@@ -230,11 +245,11 @@ class Ui_MainWindow(object):
             self.simulation_error()
 
 
-    def stop_simulation(self):
+    def stop_simulation(self) -> None:
         self.chart.stop_time()
     
 
-    def simulation_error(self):
+    def simulation_error(self) -> None:
         self.message = QtWidgets.QMessageBox()
         self.message.setIcon(QtWidgets.QMessageBox.Warning)
         self.message.setWindowTitle("Warning")
@@ -242,7 +257,7 @@ class Ui_MainWindow(object):
         self.message.exec()
 
 
-    def field_error(self):
+    def field_error(self) -> None:
         self.message = QtWidgets.QMessageBox()
         self.message.setIcon(QtWidgets.QMessageBox.Warning)
         self.message.setWindowTitle("Warning")
