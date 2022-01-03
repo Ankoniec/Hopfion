@@ -32,6 +32,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.stopButton.setEnabled(False)
 
 
     def create_buttons(self):
@@ -145,11 +146,11 @@ class Ui_MainWindow(object):
         self.linesSlider.valueChanged.connect(self.update_slider_labels)
         self.azimuthSlider.valueChanged.connect(self.update_slider_labels)
         self.elevationSlider.valueChanged.connect(self.update_slider_labels)
+        self.infoButton.clicked.connect(self.display_info)
+        self.simtype1_radioButton.clicked.connect(self.sim1_GUI)
+        self.simtype2_radioButton.clicked.connect(self.sim2_GUI)
         self.startButton.clicked.connect(self.start_simulation)
         self.stopButton.clicked.connect(self.stop_simulation)
-        self.infoButton.clicked.connect(self.display_info)
-        self.simtype1_radioButton.clicked.connect(self.disable_sim2)
-        self.simtype2_radioButton.clicked.connect(self.enable_sim2)
 
 
     def retranslateUi(self, MainWindow:object) -> None:
@@ -168,20 +169,18 @@ class Ui_MainWindow(object):
         self.lines_label.setText(_translate("MainWindow", "lines"))
         self.azimuth_label.setText(_translate("MainWindow", "azimuth"))
         self.elevation_label.setText(_translate("MainWindow", "elevation"))
-        self.camposition_label.setText(_translate("MainWindow", "Camera's position"))
-        self.settings_label.setText(_translate("MainWindow", "Simulation's settings"))
+        self.camposition_label.setText(_translate("MainWindow", "Camera position"))
+        self.settings_label.setText(_translate("MainWindow", "Simulation settings"))
         self.simtype1_radioButton.setText(_translate("MainWindow", "time evolution of a single field line"))
-        self.simtype2_radioButton.setText(_translate("MainWindow", "field lines in a given time"))
+        self.simtype2_radioButton.setText(_translate("MainWindow", "field lines for a given time"))
 
 
-    def disable_sim2(self):
+    def sim1_GUI(self):
         self.linesSlider.setEnabled(False)
-        self.stopButton.setEnabled(False)
 
 
-    def enable_sim2(self):
+    def sim2_GUI(self):
         self.linesSlider.setEnabled(True)
-        self.stopButton.setEnabled(False)
 
 
     def update_slider_labels(self):
@@ -196,40 +195,58 @@ class Ui_MainWindow(object):
 
         if self.simtype1_radioButton.isChecked():
 
-            self.chart.sim1_init_figure(
-                self.magneticfield_checkBox.isChecked(),
-                self.electricfield_checkBox.isChecked(),
-                self.timeSlider.value()*0.05,
-                self.timeNumber_label,
-                self.timeSlider,
-                self.startButton,
-                self.stopButton,
-                self.azimuthSlider,
-                self.elevationSlider
-            )
+            if not self.magneticfield_checkBox.isChecked() and not self.electricfield_checkBox.isChecked():
+                self.field_error()
+
+            else:
+
+                self.chart.sim1_init_figure(
+                    self.magneticfield_checkBox.isChecked(),
+                    self.electricfield_checkBox.isChecked(),
+                    self.timeSlider.value()*0.05,
+                    self.timeNumber_label,
+                    self.timeSlider,
+                    self.startButton,
+                    self.stopButton,
+                    self.azimuthSlider,
+                    self.elevationSlider
+                )
 
         elif self.simtype2_radioButton.isChecked():
 
-            self.chart.sim2_init_figure(
-                self.magneticfield_checkBox.isChecked(),
-                self.electricfield_checkBox.isChecked(),
-                self.timeSlider.value()*0.05,
-                self.linesSlider.value()
-            )
-            
+            if not self.magneticfield_checkBox.isChecked() and not self.electricfield_checkBox.isChecked():
+                self.field_error()
+
+            else:            
+
+                self.chart.sim2_init_figure(
+                    self.magneticfield_checkBox.isChecked(),
+                    self.electricfield_checkBox.isChecked(),
+                    self.timeSlider.value()*0.05,
+                    self.linesSlider.value()
+                )
+                
         else:
-            self.display_message()
+            self.simulation_error()
 
 
     def stop_simulation(self):
         self.chart.stop_time()
     
 
-    def display_message(self):
+    def simulation_error(self):
         self.message = QtWidgets.QMessageBox()
         self.message.setIcon(QtWidgets.QMessageBox.Warning)
         self.message.setWindowTitle("Warning")
         self.message.setText("Please choose a simulation mode.")
+        self.message.exec()
+
+
+    def field_error(self):
+        self.message = QtWidgets.QMessageBox()
+        self.message.setIcon(QtWidgets.QMessageBox.Warning)
+        self.message.setWindowTitle("Warning")
+        self.message.setText("Please choose field type.")
         self.message.exec()
 
 
@@ -244,6 +261,10 @@ class Ui_MainWindow(object):
             "2. field lines in a given time - enables the user to choose how many lines to draw and calculates them at the given time, so we can observe how the electric and magnetic field looks like in general.\n\n"+ 
             "Please notice that when choosing time over 5 seconds, the simulation needs more time to calculate field lines as they are getting bigger. Also, the more lines we want to draw, the longer it will take to calculate them.\n"+
             "In worst cases it can take up to one minute to show the calculated field (for example if we choose both electric and magnetic field at time of 10 seconds and 40 lines each)\n\n"+
-            "User can choose position of the camera in both variants by changing azimuth and elevation."
+            "User can choose position of the camera in both variants by changing azimuth and elevation.\n"+
+            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"+
+            "Author: Anna Konieczny\n"+
+            "University: AGH University of Science and Technology\n"+
+            "Program was made as a part of engineering thesis.\n"
             )
         self.info.exec()

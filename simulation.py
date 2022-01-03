@@ -4,7 +4,7 @@ from numba import jit
 
 class Simulation:
     def __init__(self, x0:float, y0:float, z0:float,
-                t:float, type:str , dt:float=0.05,
+                t:float, field_type:str , dt:float=0.05,
                 dx:float=0.001, dy:float=0.001, dz:float=0.001) -> object:
   
         self.x0 = x0
@@ -13,7 +13,7 @@ class Simulation:
 
         self.t = t
         self.dt = dt
-        self.type = type
+        self.field_type = field_type
 
         self.dx = dx
         self.dy = dy
@@ -45,10 +45,11 @@ class Simulation:
         Ly = [self.y0]
         Lz = [self.z0]
         i=0
+
         while 1:
-            if self.type=='magnetic':
+            if self.field_type=='magnetic':
                 self.Fx, self.Fy, self.Fz = self.Riemann_Silberstein_vector(Lx[i],Ly[i],Lz[i],self.t).imag
-            if self.type=='electric':
+            if self.field_type=='electric':
                 self.Fx, self.Fy, self.Fz = self.Riemann_Silberstein_vector(Lx[i],Ly[i],Lz[i],self.t).real
                 
             self.Fx, self.Fy, self.Fz = self.normalize(self.Fx, self.Fy, self.Fz)
@@ -56,9 +57,12 @@ class Simulation:
             Ly.append(Ly[i] + self.dy*self.Fy)
             Lz.append(Lz[i] + self.dz*self.Fz)
             
-            if i>100 and abs(Lx[0]-Lx[-1])<0.01 and abs(Ly[0]-Ly[-1])<0.01 and abs(Lz[0]-Lz[-1])<0.01:
+            if (i>100 and abs(Lx[0]-Lx[-1])<0.01 
+                and abs(Ly[0]-Ly[-1])<0.01 
+                and abs(Lz[0]-Lz[-1])<0.01):
                 break
             i+=1
+
         self.t += self.dt
         
         return Lx, Ly, Lz

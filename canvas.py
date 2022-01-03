@@ -39,6 +39,10 @@ class SimulationChart(FigureCanvas):
         self.stop_button = stop_button
         self.azimuth_slider = azimuth_slider
         self.elevation_slider = elevation_slider
+        self.start_button.setEnabled(False)
+        self.stop_button.setEnabled(True)
+        self.azimuth_slider.setEnabled(False)
+        self.elevation_slider.setEnabled(False)
 
         self.axes.cla()
 
@@ -58,17 +62,13 @@ class SimulationChart(FigureCanvas):
 
         self.axes.view_init(self.azimuth,self.elevation)
         self.draw()
-        self.start_sim1_time()
+        self.start_time()
 
 
-    def start_sim1_time(self) -> None:
+    def start_time(self) -> None:
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.update_figure)
         self.timer.start(10)
-        self.start_button.setEnabled(False)
-        self.stop_button.setEnabled(True)
-        self.azimuth_slider.setEnabled(False)
-        self.elevation_slider.setEnabled(False)
 
 
     def update_figure(self) -> None:
