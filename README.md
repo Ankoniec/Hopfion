@@ -16,3 +16,6 @@ Application made in order to visualize time evolution of a knotted electromagnet
 * matplotlib 3.4.3
 * Numba 0.54.1
 * PyQt5 5.15.4
+
+# Setup
+To run this project, install all of the required libraries mentioned above. Download files from repository. Open the terminal, navigate to the directory where the files are located and launch application by typing: python main.py
